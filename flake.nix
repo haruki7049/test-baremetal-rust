@@ -117,6 +117,10 @@
               # Book Tools
               pkgs.mdbook
             ];
+
+            env = {
+              RUSTC_BOOTSTRAP = 1;
+            };
           };
         };
     };
