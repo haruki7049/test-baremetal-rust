@@ -107,15 +107,11 @@
 
           devShells.default = pkgs.mkShell {
             nativeBuildInputs = [
-              # Compiler
+              # Build tools
               rust
 
-              # Development Tools
-              pkgs.sqlite # For debugging
-              pkgs.sqlx-cli # For Database migration
-
-              # Book Tools
-              pkgs.mdbook
+              # Qemu
+              pkgs.qemu
             ];
 
             env = {
