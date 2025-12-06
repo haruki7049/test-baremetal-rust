@@ -74,10 +74,6 @@
               # Qemu
               pkgs.qemu
             ];
-
-            env = {
-              RUSTC_BOOTSTRAP = 1;
-            };
           };
         };
     };
