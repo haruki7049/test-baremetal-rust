@@ -4,7 +4,10 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-bootloader = "0.9.33"
+bootloader_api = "0.11.13"
+
+[build-dependencies]
+bootloader = "0.11.13"
 
 [profile.dev]
 panic = "abort"

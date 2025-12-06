@@ -2,17 +2,13 @@
 #![no_main]
 
 use core::panic::PanicInfo;
+use bootloader_api::entry_point;
 
-static HELLO: &[u8] = b"Hello World!";
+static HELLO: &[u8] = b"Kernel booted!";
 
-/// This function is called on panic.
-#[panic_handler]
-fn panic(_info: &PanicInfo) -> ! {
-    loop {}
-}
+entry_point!(kernel_main);
 
-#[unsafe(no_mangle)]
-pub extern "C" fn _start() -> ! {
+fn kernel_main(_boot_info: &'static mut bootloader_api::BootInfo) -> ! {
     let vga_buffer = 0xb8000 as *mut u8;
 
     for (i, &byte) in HELLO.iter().enumerate() {
@@ -22,5 +18,10 @@ pub extern "C" fn _start() -> ! {
         }
     }
 
+    loop {}
+}
+
+#[panic_handler]
+fn panic(_info: &PanicInfo) -> ! {
     loop {}
 }
