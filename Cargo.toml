@@ -3,11 +3,8 @@ name = "test-baremetal-with-stable-rustc"
 version = "0.1.0"
 edition = "2024"
 
-[package.metadata.bootimage]
-build-command = ["build"]
-
 [dependencies]
-bootloader = "0.10.13"
+bootloader = "0.11.13"
 
 [profile.dev]
 panic = "abort"
