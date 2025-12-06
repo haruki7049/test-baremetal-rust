@@ -3,5 +3,5 @@
 version = 4
 
 [[package]]
-name = "hoge"
+name = "test-baremetal-with-stable-rustc"
 version = "0.1.0"
