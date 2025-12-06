@@ -69,6 +69,7 @@
             nativeBuildInputs = [
               # Build tools
               rust
+              pkgs.cargo-bootimage
 
               # Qemu
               pkgs.qemu
