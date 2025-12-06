@@ -5,7 +5,6 @@ edition = "2024"
 
 [package.metadata.bootimage]
 build-command = ["build"]
-target = ".cargo/x86_64-baremetal.json"
 
 [dependencies]
 bootloader = "0.10.13"
