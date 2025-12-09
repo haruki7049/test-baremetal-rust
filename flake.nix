@@ -63,9 +63,15 @@
           };
           cargo-clippy = craneLib.cargoClippy {
             inherit src buildInputs nativeBuildInputs;
+
+            cargoClippyExtraArgs = "";
+            cargoArtifacts = null;
           };
           cargo-doc = craneLib.cargoDoc {
             inherit src buildInputs nativeBuildInputs;
+
+            cargoArtifacts = null;
+            docInstallRoot = "target/x86_64-unknown-uefi/doc";
           };
         in
         {

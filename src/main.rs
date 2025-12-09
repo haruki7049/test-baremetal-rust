@@ -123,7 +123,5 @@ fn locate_graphic_protocol<'a>(
 
 #[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {
-    loop {
-        hlt();
-    }
+    loop {}
 }
