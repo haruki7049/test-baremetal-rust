@@ -1,5 +1,5 @@
 [toolchain]
-channel = "nightly-2025-12-02"
+channel = "nightly-2024-01-01"
 components = ["rust-src", "rust-analyzer", "llvm-tools-preview"]
 profile = "default"
-targets = ["x86_64-unknown-none"]
+targets = ["x86_64-unknown-uefi"]

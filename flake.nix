@@ -73,6 +73,9 @@
 
               # Qemu
               pkgs.qemu
+
+              # NuShell
+              pkgs.nushell
             ];
           };
         };

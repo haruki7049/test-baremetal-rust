@@ -13,3 +13,6 @@ debug/
 .direnv
 result
 result-*
+
+# Test mount directory
+/mnt/
