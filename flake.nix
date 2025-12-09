@@ -40,7 +40,7 @@
           overlays = [ inputs.rust-overlay.overlays.default ];
 
           # Sources for Nix Derivations
-          src = lib.cleanSource ./.;
+          src = ./.;
           buildInputs = [ ];
           nativeBuildInputs = [
             # Build tools
@@ -54,22 +54,18 @@
           ];
 
           # Nix Derivations (Nix flake's outputs)
-          cargoArtifacts = craneLib.buildDepsOnly {
-            inherit src buildInputs nativeBuildInputs;
-
-            doCheck = false;
-          };
           test-baremetal-rust = craneLib.buildPackage {
-            inherit src cargoArtifacts buildInputs nativeBuildInputs;
+            inherit src buildInputs nativeBuildInputs;
 
             strictDeps = true;
             doCheck = false;
+            cargoArtifacts = null;
           };
           cargo-clippy = craneLib.cargoClippy {
-            inherit src cargoArtifacts buildInputs nativeBuildInputs;
+            inherit src buildInputs nativeBuildInputs;
           };
           cargo-doc = craneLib.cargoDoc {
-            inherit src cargoArtifacts buildInputs nativeBuildInputs;
+            inherit src buildInputs nativeBuildInputs;
           };
         in
         {
