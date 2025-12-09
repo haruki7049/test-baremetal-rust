@@ -2,6 +2,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     systems.url = "github:nix-systems/default";
+    crane.url = "github:ipetkov/crane";
     flake-compat.url = "github:edolstra/flake-compat";
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
@@ -29,12 +30,48 @@
       perSystem =
         {
           pkgs,
+          lib,
           system,
           ...
         }:
         let
           rust = pkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml;
+          craneLib = (inputs.crane.mkLib pkgs).overrideToolchain rust;
           overlays = [ inputs.rust-overlay.overlays.default ];
+
+          # Sources for Nix Derivations
+          src = lib.cleanSource ./.;
+          buildInputs = [ ];
+          nativeBuildInputs = [
+            # Build tools
+            rust
+            pkgs.cargo-bootimage
+
+            # Qemu
+            pkgs.qemu
+
+            # NuShell
+            pkgs.nushell
+          ];
+
+          # Nix Derivations (Nix flake's outputs)
+          cargoArtifacts = craneLib.buildDepsOnly {
+            inherit src buildInputs nativeBuildInputs;
+
+            doCheck = false;
+          };
+          test-baremetal-rust = craneLib.buildPackage {
+            inherit src cargoArtifacts buildInputs nativeBuildInputs;
+
+            strictDeps = true;
+            doCheck = false;
+          };
+          cargo-clippy = craneLib.cargoClippy {
+            inherit src cargoArtifacts buildInputs nativeBuildInputs;
+          };
+          cargo-doc = craneLib.cargoDoc {
+            inherit src cargoArtifacts buildInputs nativeBuildInputs;
+          };
         in
         {
           _module.args.pkgs = import inputs.nixpkgs {
@@ -65,18 +102,18 @@
             programs.shfmt.enable = true;
           };
 
+          packages = {
+            inherit test-baremetal-rust;
+            default = test-baremetal-rust;
+            doc = cargo-doc;
+          };
+
+          checks = {
+            inherit test-baremetal-rust cargo-clippy cargo-doc;
+          };
+
           devShells.default = pkgs.mkShell {
-            nativeBuildInputs = [
-              # Build tools
-              rust
-              pkgs.cargo-bootimage
-
-              # Qemu
-              pkgs.qemu
-
-              # NuShell
-              pkgs.nushell
-            ];
+            inherit buildInputs nativeBuildInputs;
           };
         };
     };
