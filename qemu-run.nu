@@ -3,14 +3,20 @@
 def main [
   --bios: string = "./third-party/ovmf/RELEASEX64_OVMF.fd",
   --drive: string = "format=raw,file=fat:rw:mnt",
+  --copy,
+  --build,
 ] {
-  print "Running 'cargo build'..."
-  cargo build
-  print "'cargo build' is done."
+  if ($build) {
+    print "Running 'cargo build'..."
+    cargo build
+    print "'cargo build' is done."
+  }
 
-  print "Copying 'BOOTX64.EFI'..."
-  copy_bootx64
-  print "Copying 'BOOTX64.EFI' is done."
+  if ($copy) {
+    print "Copying 'BOOTX64.EFI'..."
+    copy_bootx64
+    print "Copying 'BOOTX64.EFI' is done."
+  }
 
   print "Runing QEMU (qemu-system-x86_64)..."
   qemu-system-x86_64 -bios $bios -drive $drive
