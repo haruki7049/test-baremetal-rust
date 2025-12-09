@@ -96,13 +96,14 @@ struct EfiGraphicsOutputProtocolPixelInfo {
 }
 const _: () = assert!(size_of::<EfiGraphicsOutputProtocolPixelInfo>() == 36);
 
-fn locate_graphic_protocol<'a>(efi_system_table: &EfiSystemTable) -> Result<&'a EfiGraphicsOutputProtocol<'a>, &'static str> {
+fn locate_graphic_protocol<'a>(
+    efi_system_table: &EfiSystemTable,
+) -> Result<&'a EfiGraphicsOutputProtocol<'a>, &'static str> {
     let mut graphic_output_protocol = null_mut::<EfiGraphicsOutputProtocol>();
     let status = (efi_system_table.boot_services.locate_protocol)(
         &EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID,
         null_mut::<EfiVoid>(),
-        &mut graphic_output_protocol as *mut *mut EfiGraphicsOutputProtocol
-            as *mut *mut EfiVoid,
+        &mut graphic_output_protocol as *mut *mut EfiGraphicsOutputProtocol as *mut *mut EfiVoid,
     );
 
     if status != EfiStatus::Success {
