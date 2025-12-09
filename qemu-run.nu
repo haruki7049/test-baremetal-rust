@@ -1,3 +1,8 @@
 #!/usr/bin/env nu
 
-qemu-system-x86_64 -bios third-party/ovmf/RELEASEX64_OVMF.fd -drive format=raw,file=fat:rw:mnt
+def main [
+  --bios: string = "third-party/ovmf/RELEASEX64_OVMF.fd",
+  --drive: string = "format=raw,file=fat:rw:mnt",
+] {
+  qemu-system-x86_64 -bios $bios -drive $drive
+}
