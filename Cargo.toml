@@ -3,6 +3,10 @@ name = "test-baremetal-rust"
 version.workspace = true
 edition.workspace = true
 
+[[bin]]
+name = "test-baremetal-rust"
+test = false
+
 [workspace.package]
 version = "0.1.0"
 edition = "2021"
