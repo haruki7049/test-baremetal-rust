@@ -44,6 +44,34 @@ fn efi_main(_image_handle: EfiHandle, efi_system_table: &EfiSystemTable) {
         let _ = draw_line(&mut vram, 0xff0000, cx, cy, i, rect_size);
     }
 
+    let font_a = "
+........
+...**...
+...**...
+...**...
+...**...
+..*..*..
+..*..*..
+..*..*..
+..*..*..
+.******.
+.*....*.
+.*....*.
+.*....*.
+***..***
+........
+........
+    ";
+    for (y, row) in font_a.trim().split('\n').enumerate() {
+        for (x, pixel) in row.chars().enumerate() {
+            let color = match pixel {
+                '*' => 0xffffff,
+                _ => continue,
+            };
+            let _ = draw_point(&mut vram, color, x as i64, y as i64);
+        }
+    }
+
     loop {
         hlt();
     }
