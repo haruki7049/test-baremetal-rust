@@ -1,6 +1,5 @@
 #![no_std]
 #![no_main]
-#![feature(offset_of)]
 
 use core::panic::PanicInfo;
 use test_baremetal_rust::graphics::draw_line;
