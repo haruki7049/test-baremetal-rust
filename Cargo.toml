@@ -10,3 +10,6 @@ test = false
 [workspace.package]
 version = "0.1.0"
 edition = "2021"
+
+[dependencies]
+thiserror = { version = "2.0.18", default-features = false }

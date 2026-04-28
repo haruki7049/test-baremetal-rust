@@ -14,17 +14,20 @@ use test_baremetal_rust::uefi::EfiSystemTable;
 use test_baremetal_rust::x86::hlt;
 
 #[no_mangle]
-fn efi_main(_image_handle: EfiHandle, efi_system_table: &EfiSystemTable) {
-    let mut vram = init_vram(efi_system_table).expect("init_vram failed");
+fn efi_main(
+    _image_handle: EfiHandle,
+    efi_system_table: &EfiSystemTable,
+) -> Result<(), test_baremetal_rust::result::Error> {
+    let mut vram = init_vram(efi_system_table)?;
 
     let vw = vram.width();
     let vh = vram.height();
-    fill_rect(&mut vram, 0xa0a0a0, 0, 0, vw, vh).expect("fill_rect failed");
-    fill_rect(&mut vram, 0xff0000, 32, 32, 32, 32).expect("fill_rect failed");
-    fill_rect(&mut vram, 0x00ff00, 64, 64, 64, 64).expect("fill_rect failed");
-    fill_rect(&mut vram, 0x0000ff, 128, 128, 128, 128).expect("fill_rect failed");
+    fill_rect(&mut vram, 0xa0a0a0, 0, 0, vw, vh)?;
+    fill_rect(&mut vram, 0xff0000, 32, 32, 32, 32)?;
+    fill_rect(&mut vram, 0x00ff00, 64, 64, 64, 64)?;
+    fill_rect(&mut vram, 0x0000ff, 128, 128, 128, 128)?;
     for i in 0..256 {
-        draw_point(&mut vram, 0x010101 * i as u32, i, i).expect("draw_point failed");
+        draw_point(&mut vram, 0x010101 * i as u32, i, i)?;
     }
 
     let grid_size: i64 = 32;

@@ -1,6 +1,12 @@
 use crate::result::Result;
 use core::cmp::min;
 
+#[derive(Debug, thiserror::Error)]
+pub enum GraphicsError {
+    #[error("Out of range")]
+    OutOfRange,
+}
+
 pub trait Bitmap {
     fn bytes_per_pixel(&self) -> i64;
     fn pixels_per_line(&self) -> i64;
@@ -41,7 +47,7 @@ unsafe fn unchecked_draw_point<T: Bitmap>(buf: &mut T, color: u32, x: i64, y: i6
 }
 
 pub fn draw_point<T: Bitmap>(buf: &mut T, color: u32, x: i64, y: i64) -> Result<()> {
-    *(buf.pixel_at_mut(x, y).ok_or("Out of Range")?) = color;
+    *(buf.pixel_at_mut(x, y).ok_or(GraphicsError::OutOfRange)?) = color;
     Ok(())
 }
 
@@ -58,7 +64,7 @@ pub fn fill_rect<T: Bitmap>(
         || !buf.is_in_x_range(px + w - 1)
         || !buf.is_in_y_range(py + h - 1)
     {
-        return Err("Out of Range");
+        return Err(GraphicsError::OutOfRange.into());
     }
 
     for y in py..py + h {
@@ -97,7 +103,7 @@ pub fn draw_line<T: Bitmap>(
         || !buf.is_in_y_range(y0)
         || !buf.is_in_y_range(y1)
     {
-        return Err("Out of Range");
+        return Err(GraphicsError::OutOfRange.into());
     }
 
     let dx = (x1 - x0).abs();

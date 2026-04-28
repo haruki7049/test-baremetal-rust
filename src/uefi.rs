@@ -7,6 +7,12 @@ use core::ptr::null_mut;
 type EfiVoid = u8;
 pub type EfiHandle = u64;
 
+#[derive(Debug, thiserror::Error)]
+pub enum UefiError {
+    #[error("Invalid locating GraphicsOutputProtocol")]
+    InvalidLocatingGraphicsOutputProtocol,
+}
+
 #[derive(Debug, PartialEq, Eq, Copy, Clone)]
 #[must_use]
 #[repr(u64)]
@@ -88,7 +94,7 @@ fn locate_graphic_protocol<'a>(
     );
 
     if status != EfiStatus::Success {
-        return Err("Failed to locate graphics output protocol");
+        return Err(UefiError::InvalidLocatingGraphicsOutputProtocol.into());
     }
 
     Ok(unsafe { &*graphic_output_protocol })
